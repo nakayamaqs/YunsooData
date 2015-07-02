@@ -7,7 +7,6 @@ from yunsoo.__init__ import __data_server__
 from yunsoo.s3_helper import save_content
 current_cookies = get_cookie()
 
-
 def distinct_list(seq):
     # order preserving
     checked = []
@@ -16,13 +15,18 @@ def distinct_list(seq):
             checked.append(e)
     return checked
 
-
-def get_data_from_1d_sheet(sheet_id, unit_id, val, s3_key):
+def get_data_from_1d_sheet(sheet_id, com_unit_id, com_val,  date_unit_id, dt_val, s3_key):
     # set_current_sheet(id)
-    payload = {'sheet_id': sheet_id, 'id': unit_id, 'filter': {'op': 'in', 'val': [val]}}
+    payload = {'sheet_id': sheet_id, 'id': com_unit_id, 'filter': {'op': 'in', 'val': [com_val]}}
     result = requests.post(__data_server__ + '/sheet/unit/modify?exec_now=true', data=json.dumps(payload),
                           cookies=current_cookies).json()
     # print(result)
+     #filter by timespan
+    if date_unit_id.strip():
+        payload = {'sheet_id': sheet_id, 'id': date_unit_id, 'filter': {'op': 'bw', 'val': dt_val}}
+        result = requests.post(__data_server__ + '/sheet/unit/modify?exec_now=true', data=json.dumps(payload),
+                          cookies=current_cookies).json()
+        print(result)
 
     # set dimensions
     dimension_names = []
@@ -56,12 +60,19 @@ def get_data_from_1d_sheet(sheet_id, unit_id, val, s3_key):
     save_content(s3_key, json.dumps(final_result, ensure_ascii=False))
 
 # URL to query:  http://54.223.135.72:8001/sheet?id=4.S.19740602643438
-def get_data_from_2d_sheet(sheet_id, unit_id, val, s3_key):
+def get_data_from_2d_sheet(sheet_id, com_unit_id, com_val, date_unit_id, dt_val,  s3_key):
     # set_current_sheet(id)
     # result = requests.get(__data_server__ + '/sheet?id=%s' % id, cookies=current_cookies).json()
-    payload = {'sheet_id': sheet_id, 'id': unit_id, 'filter': {'op': 'in', 'val': [val]}}
+    #filter by company id
+    payload = {'sheet_id': sheet_id, 'id': com_unit_id, 'filter': {'op': 'in', 'val': [com_val]}}
     result = requests.post(__data_server__ + '/sheet/unit/modify?exec_now=true', data=json.dumps(payload),
                           cookies=current_cookies).json()  # print(result)
+
+    #filter by timespan
+    payload = {'sheet_id': sheet_id, 'id': date_unit_id, 'filter': {'op': 'bw', 'val': dt_val}}
+    result = requests.post(__data_server__ + '/sheet/unit/modify?exec_now=true', data=json.dumps(payload),
+                          cookies=current_cookies).json()
+    print(result)
 
     #  set dimensions
     dimension_names = []
