@@ -72,7 +72,7 @@ def get_data_from_2d_sheet(sheet_id, com_unit_id, com_val, date_unit_id, dt_val,
     payload = {'sheet_id': sheet_id, 'id': date_unit_id, 'filter': {'op': 'bw', 'val': dt_val}}
     result = requests.post(__data_server__ + '/sheet/unit/modify?exec_now=true', data=json.dumps(payload),
                           cookies=current_cookies).json()
-    print(result)
+    # print(result)
 
     #  set dimensions
     dimension_names = []
@@ -114,7 +114,7 @@ def set_current_sheet(id):
     # print(' set current sheet: ' + str(response.json()))
 
 def get_val_by_key(id, key):
-    headers = {'Content-Type': 'application/json'}
+    headers = {'Content-Type': 'application/jsQon'}
     payload = {'id': id, 'key': key, 'prop': 'ele_content'}
     response = requests.get(__data_server__ + '/sheet/unit', headers=headers, params=payload, cookies=current_cookies)
     # print(' get_val_by_key: ' + str(response.json()))
