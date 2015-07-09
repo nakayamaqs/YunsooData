@@ -1,0 +1,26 @@
+﻿{
+    "4.S.19739162398753": {
+        "company_unit_id": "4.SA.组织ID.19739176367353",
+        "datetime_unit_id": "4.SA.日期.19739176353953",
+        "dimension": "2D",
+        "name": "product_month_scan_count"
+    },
+    "4.S.19740602643438": {
+        "company_unit_id": "4.SA.组织ID.19740604775335",
+        "datetime_unit_id": "",
+        "dimension": "1D",
+        "name": "product_qrcode_count"
+    },
+    "4.S.19738931498116": {
+        "company_unit_id": "4.SA.组织ID.19738938410218",
+        "datetime_unit_id": "4.SA.日期.19738938396608",
+        "dimension": "1D",
+        "name": "product_scan_count"
+    },
+    "4.S.19739337276415": {
+        "company_unit_id": "4.SA.组织ID.19739861318573",
+        "datetime_unit_id": "4.SA.日期.19739861304002",
+        "dimension": "1D",
+        "name": "location_scan_count"
+    }
+}

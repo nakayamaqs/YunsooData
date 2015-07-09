@@ -1,0 +1,372 @@
+﻿{
+  "version": 1,
+  "dsn": {
+    "yunsu": {
+      "type": "mysql",
+      "address": "yunsootestdb-r1.czevfdgeevhl.rds.cn-north-1.amazonaws.com.cn",
+      "port": 3306,
+      "dbname": "yunsoo2015DB",
+      "user": "root",
+      "passwd": "admin201512"
+    }
+  },
+  "cubes": [
+    {
+      "name": "scan_record",
+      "datasets": [
+        {
+          "dsn": "yunsu",
+          "sql": "SELECT a.*, TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(location, ';', 4 ), ':', -1) ) AS city, TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(location, ';', 3 ), ':', -1) ) AS state, TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(location, ';', 1 ), ':', -1) )  AS address, DATE(created_datetime) AS scan_date FROM scan_record a",
+          "key": [
+            "id"
+          ],
+          "timestamp": "created_datetime"
+        }
+      ],
+      "orderby": [
+        [
+          "time",
+          "desc"
+        ]
+      ]
+    },
+    {
+      "name": "product_base",
+      "datasets": [
+        {
+          "dsn": "yunsu",
+          "sql": "SELECT * FROM product_base",
+          "key": [
+            "id"
+          ],
+          "timestamp": "created_datetime"
+        }
+      ]
+    },
+    {
+      "name": "user",
+      "datasets": [
+        {
+          "dsn": "yunsu",
+          "sql": "SELECT * FROM user",
+          "key": [
+            "id"
+          ],
+          "timestamp": "created_datetime"
+        }
+      ]
+    },
+    {
+      "name": "product_category",
+      "datasets": [
+        {
+          "dsn": "yunsu",
+          "sql": "select * from product_category"
+        }
+      ],
+      "type": "dim"
+    },
+    {
+      "name": "product_key_batch",
+      "datasets": [
+        {
+          "dsn": "yunsu",
+          "sql": "SELECT * FROM product_key_batch",
+          "key": [
+            "id"
+          ],
+          "timestamp": "created_datetime"
+        }
+      ]
+    }
+  ],
+  "attributes": [
+    {
+      "name": "date",
+      "columns": [
+        "scan_record.scan_date"
+      ],
+      "display": 1
+    },
+    {
+      "name": "产品码",
+      "columns": [
+        "scan_record.product_key"
+      ],
+      "display": 1
+    },
+    {
+      "name": "产品ID",
+      "columns": [
+        "scan_record.base_product_id",
+        "product_base.id",
+        "product_key_batch.product_base_id"
+      ],
+      "display": 1
+    },
+    {
+      "name": "产品名",
+      "columns": [
+        "product_base.name"
+      ],
+      "display": 1
+    },
+    {
+      "name": "条形码",
+      "columns": [
+        "product_base.barcode"
+      ],
+      "display": 1
+    },
+    {
+      "name": "用户ID",
+      "columns": [
+        "scan_record.user_id",
+        "user.id"
+      ],
+      "display": 1
+    },
+    {
+      "name": "扫描ID",
+      "columns": [
+        "scan_record.id"
+      ],
+      "display": 1
+    },
+    {
+      "name": "扫描地址",
+      "columns": [
+        "scan_record.address"
+      ],
+      "display": 1
+    },
+    {
+      "name": "城市",
+      "columns": [
+        "scan_record.city"
+      ]
+    },
+    {
+      "name": "省份",
+      "columns": [
+        "scan_record.state"
+      ]
+    },
+    {
+      "name": "组织ID",
+      "columns": [
+        "product_base.org_id",
+        "product_key_batch.org_id"
+      ],
+      "display": 1
+    },
+    {
+      "name": "category_id",
+      "columns": [
+        "product_base.category_id",
+        "product_category.id"
+      ]
+    },
+    {
+      "name": "类别",
+      "columns": [
+        "product_category.name"
+      ]
+    },
+    {
+      "name": "手机",
+      "columns": [
+        "user.cellular"
+      ],
+      "display": 1
+    },
+    {
+      "name": "用户名",
+      "columns": [
+        "user.name"
+      ],
+      "display": 1
+    },
+    {
+      "name": "用户地址",
+      "columns": [
+        "user.address"
+      ],
+      "display": 1
+    },
+    {
+      "name": "用户等级",
+      "columns": [
+        "user.level"
+      ],
+      "display": 1
+    },
+    {
+      "name": "用户状态",
+      "columns": [
+        "user.status"
+      ],
+      "display": 1
+    },
+    {
+      "name": "产品码数量",
+      "columns": [
+        "product_key_batch.quantity"
+      ],
+      "display": 1
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "product",
+      "main": [
+        "产品码",
+        "产品ID",
+        "category_id"
+      ],
+      "grouping": {
+        "产品ID": [
+          "产品名",
+          "条形码",
+          "组织ID"
+        ],
+        "category_id": [
+          "类别"
+        ]
+      },
+      "relation": {
+        "scan_record": [
+          [
+            "产品码",
+            "产品ID"
+          ]
+        ],
+        "product_base": [
+          [
+            "产品ID",
+            "category_id"
+          ],
+          [
+            "产品ID",
+            "产品名"
+          ],
+          [
+            "产品ID",
+            "条形码"
+          ],
+          [
+            "产品ID",
+            "组织ID"
+          ]
+        ],
+        "product_category": [
+          [
+            "category_id",
+            "类别"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "user",
+      "main": [
+        "用户ID",
+        "用户等级"
+      ],
+      "grouping": {
+        "用户ID": [
+          "手机",
+          "用户地址",
+          "用户状态",
+          "用户名"
+        ]
+      },
+      "relation": {
+        "user": [
+          [
+            "用户ID",
+            "用户等级"
+          ],
+          [
+            "用户ID",
+            "手机"
+          ],
+          [
+            "用户ID",
+            "用户地址"
+          ],
+          [
+            "用户ID",
+            "用户状态"
+          ],
+          [
+            "用户ID",
+            "用户名"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "location",
+      "main": [
+        "扫描地址",
+        "城市",
+        "省份"
+      ],
+      "grouping": {},
+      "relation": {
+        "scan_record": [
+          [
+            "扫描地址",
+            "城市"
+          ],
+          [
+            "城市",
+            "省份"
+          ]
+        ]
+      }
+    }
+  ],
+  "measures": [
+    {
+      "cube": "scan_record",
+      "measures": [
+        [
+          "经度",
+          "longitude",
+          "mean",
+          ".03f"
+        ],
+        [
+          "纬度",
+          "latitude",
+          "mean",
+          ".03f"
+        ]
+      ]
+    },
+    {
+      "cube": "product_base",
+      "measures": [
+        [
+          "保质期",
+          "shelf_life",
+          "mean",
+          ".0f"
+        ]
+      ]
+    },
+    {
+      "cube": "user",
+      "measures": [
+        [
+          "手机",
+          "cellular",
+          "count",
+          ".0f"
+        ]
+      ]
+    }
+  ]
+}

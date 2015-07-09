@@ -9,6 +9,7 @@ from yunsoo.data_import import *
 from datetime import date, timedelta
 import calendar
 
+
 def run_report(org_list, work_sheet_list, the_key_tail, from_day, end_day):
     if data_import('yunsoo/datamodel.json')['status'] == 'ok':
         for o in org_list:
@@ -75,14 +76,15 @@ def run_report(org_list, work_sheet_list, the_key_tail, from_day, end_day):
 def get_ful_key_tail(the_date):
     return str(the_date.year) + str('%02d' % the_date.month) + str('%02d' % the_date.day)
 
+
 def main_run():
-    # org_id_list = ['2k0r0963j0akld83lsd2', '2k0r1l55i2rs5544wz5', '2k0r2yvydbxbvibvgfm', '2k0r306o609oljxd1hh',
-    #                '2kbyyjauwtate9syvmy']
-    org_id_list = ['2k0r1l55i2rs5544wz5']
+    org_id_list = ['2k0r0963j0akld83lsd2', '2k0r1l55i2rs5544wz5', '2k0r2yvydbxbvibvgfm', '2k0r306o609oljxd1hh',
+                   '2kbyyjauwtate9syvmy']
+    # org_id_list = ['2k0r1l55i2rs5544wz5']
     work_sheet_input = get_work_sheet_input('yunsoo/work_sheet_input.json')
 
     # run yesterday's report
-    yesterday_key = date.today() - timedelta(8)  # every day run yesterday's report
+    yesterday_key = date.today() - timedelta(1)  # every day run yesterday's report
     yesterday_key_tail = str(yesterday_key.year) + str('%02d' % yesterday_key.month) + str('%02d' % yesterday_key.day)
     # run_report(org_id_list, work_sheet_input, yesterday_key_tail, yesterday_key, yesterday_key)
 
