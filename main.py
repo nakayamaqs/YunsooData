@@ -7,27 +7,29 @@ from yunsoo.sheet_consumer import *
 from yunsoo.data_import import *
 # import datetime
 from datetime import date, timedelta
+import calendar
 
-
-def run_report(org_list, work_sheet_list, the_date_key_tail):
+def run_report(org_list, work_sheet_list, the_key_tail, from_day, end_day):
     if data_import('yunsoo/datamodel.json')['status'] == 'ok':
-        for o in org_id_list:
+        for o in org_list:
             print("Working on org: " + str(o))
-            for i, e in enumerate(work_sheet_input):
+            for i, e in enumerate(work_sheet_list):
                 set_current_sheet(e)
-                val = get_val_by_key(work_sheet_input[e]['company_unit_id'], str(o))
-                s3_key = '/report/organization/' + str(o) + '/' + work_sheet_input[e]['name'] + '/' + the_date_key_tail
+                val = get_val_by_key(work_sheet_list[e]['company_unit_id'], str(o))
+                from_date_key = str(from_day.year) + str('%02d' % from_day.month) + str('%02d' % from_day.day)
+                end_date_key = str(end_day.year) + str('%02d' % end_day.month) + str('%02d' % end_day.day)
+                s3_key = '/report/organization/' + str(o) + '/' + work_sheet_list[e]['name'] + '/' + the_key_tail
 
-                if work_sheet_input[e]['dimension'] == '2D':
-                    get_data_from_2d_sheet(e, work_sheet_input[e]['company_unit_id'], val,
-                                           work_sheet_input[e]['datetime_unit_id'],
-                                           [the_date_key_tail, the_date_key_tail],
+                if work_sheet_list[e]['dimension'] == '2D':
+                    get_data_from_2d_sheet(e, work_sheet_list[e]['company_unit_id'], val,
+                                           work_sheet_list[e]['datetime_unit_id'],
+                                           [from_date_key, end_date_key],
                                            s3_key)
                 else:
                     # get_data_from_1d_sheet(e, work_sheet_input[e]['company_unit_id'], val, s3_key)
-                    get_data_from_1d_sheet(e, work_sheet_input[e]['company_unit_id'], val,
-                                           work_sheet_input[e]['datetime_unit_id'],
-                                           [the_date_key_tail, the_date_key_tail],
+                    get_data_from_1d_sheet(e, work_sheet_list[e]['company_unit_id'], val,
+                                           work_sheet_list[e]['datetime_unit_id'],
+                                           [from_date_key, end_date_key],
                                            s3_key)
 
                 print('Finish retrieve data for item ' + str(i + 1) + '\n')
@@ -70,12 +72,34 @@ def run_report(org_list, work_sheet_list, the_date_key_tail):
         # }
 
 
-org_id_list = ['2k0r0963j0akld83lsd2', '2k0r1l55i2rs5544wz5', '2k0r2yvydbxbvibvgfm', '2k0r306o609oljxd1hh',
-               '2kbyyjauwtate9syvmy']
-# org_id_list = ['2kbyyjauwtate9syvmy']
+def get_ful_key_tail(the_date):
+    return str(the_date.year) + str('%02d' % the_date.month) + str('%02d' % the_date.day)
 
-work_sheet_input = get_work_sheet_input('yunsoo/work_sheet_input.json')
-the_day = date.today() - timedelta(1)  # every day run yesterday's report
-the_key_tail = str(the_day.year) + str('%02d' % the_day.month) + str('%02d' % the_day.day)
+def main_run():
+    # org_id_list = ['2k0r0963j0akld83lsd2', '2k0r1l55i2rs5544wz5', '2k0r2yvydbxbvibvgfm', '2k0r306o609oljxd1hh',
+    #                '2kbyyjauwtate9syvmy']
+    org_id_list = ['2k0r1l55i2rs5544wz5']
+    work_sheet_input = get_work_sheet_input('yunsoo/work_sheet_input.json')
 
-run_report(org_id_list, work_sheet_input, the_key_tail)
+    # run yesterday's report
+    yesterday_key = date.today() - timedelta(8)  # every day run yesterday's report
+    yesterday_key_tail = str(yesterday_key.year) + str('%02d' % yesterday_key.month) + str('%02d' % yesterday_key.day)
+    # run_report(org_id_list, work_sheet_input, yesterday_key_tail, yesterday_key, yesterday_key)
+
+    # run last week's report
+    if yesterday_key.weekday() == 0:
+        from_date = yesterday_key - timedelta(7)
+        end_date = yesterday_key - timedelta(1)
+        file_key_tail = get_ful_key_tail(from_date) + str("-") + get_ful_key_tail(end_date)
+        run_report(org_id_list, work_sheet_input, file_key_tail, from_date, end_date)
+
+    # run last month's report
+    if yesterday_key.day == 1:
+        end_date = yesterday_key - timedelta(1)  # get end day of last month
+        w, today_days = calendar.monthrange(end_date.year, end_date.month)
+        from_date = yesterday_key - timedelta(today_days)
+        file_key_tail = str(from_date.year) + str('%02d' % from_date.month)
+        run_report(org_id_list, work_sheet_input, file_key_tail, from_date, end_date)
+
+
+main_run()
