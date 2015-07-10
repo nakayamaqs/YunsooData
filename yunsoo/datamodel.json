@@ -1,5 +1,7 @@
 ﻿{
   "version": 1,
+  "src_tz": 0,
+  "target_tz": 8,
   "dsn": {
     "yunsu": {
       "type": "mysql",
@@ -16,7 +18,7 @@
       "datasets": [
         {
           "dsn": "yunsu",
-          "sql": "SELECT a.*, TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(location, ';', 4 ), ':', -1) ) AS city, TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(location, ';', 3 ), ':', -1) ) AS state, TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(location, ';', 1 ), ':', -1) )  AS address, DATE(created_datetime) AS scan_date FROM scan_record a",
+          "sql": "SELECT a.*, TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(location, ';', 4 ), ':', -1) ) AS city, TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(location, ';', 3 ), ':', -1) ) AS state, TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(location, ';', 1 ), ':', -1) )  AS address, created_datetime AS scan_date FROM scan_record a",
           "key": [
             "id"
           ],
@@ -207,13 +209,6 @@
         "user.status"
       ],
       "display": 1
-    },
-    {
-      "name": "产品码数量",
-      "columns": [
-        "product_key_batch.quantity"
-      ],
-      "display": 1
     }
   ],
   "dimensions": [
@@ -364,6 +359,17 @@
           "手机",
           "cellular",
           "count",
+          ".0f"
+        ]
+      ]
+    },
+    {
+      "cube": "product_key_batch",
+      "measures": [
+        [
+          "产品码数量",
+          "quantity",
+          "sum",
           ".0f"
         ]
       ]

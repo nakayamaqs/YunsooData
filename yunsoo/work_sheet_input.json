@@ -5,8 +5,8 @@
         "dimension": "2D",
         "name": "product_month_scan_count"
     },
-    "4.S.19740602643438": {
-        "company_unit_id": "4.SA.组织ID.19740604775335",
+    "4.S.21754478064881": {
+        "company_unit_id": "4.SA.组织ID.21754479138487",
         "datetime_unit_id": "",
         "dimension": "1D",
         "name": "product_qrcode_count"
