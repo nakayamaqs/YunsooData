@@ -86,7 +86,7 @@ def main_run():
     # run yesterday's report
     yesterday_key = date.today() - timedelta(1)  # every day run yesterday's report
     yesterday_key_tail = str(yesterday_key.year) + str('%02d' % yesterday_key.month) + str('%02d' % yesterday_key.day)
-    # run_report(org_id_list, work_sheet_input, yesterday_key_tail, yesterday_key, yesterday_key)
+    run_report(org_id_list, work_sheet_input, yesterday_key_tail, yesterday_key, yesterday_key)
 
     # run last week's report
     if yesterday_key.weekday() == 0:
