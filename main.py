@@ -20,7 +20,7 @@ def get_current_path():
     if os.name == 'nt':
         return ''
     else:
-        return os.path.abspath(os.path.dirname(sys.argv[0]))
+        return os.path.abspath(os.path.dirname(sys.argv[0]))+'/'
 
 def run_report(org_list, work_sheet_list, the_key_tail, from_day, end_day):
     if data_import(get_current_path() + 'yunsoo/datamodel.json')['status'] == 'ok':
