@@ -118,4 +118,8 @@ def get_val_by_key(id, key):
     payload = {'id': id, 'key': key, 'prop': 'ele_content'}
     response = requests.get(__data_server__ + '/sheet/unit', headers=headers, params=payload, cookies=current_cookies)
     # print(' get_val_by_key: ' + str(response.json()))
-    return response.json()['data']['ele_content']['ele_list']['data'][0][0]
+    lst = response.json()['data']['ele_content']['ele_list']['data'][0]
+    if lst:
+        return response.json()['data']['ele_content']['ele_list']['data'][0][0]
+    else:
+        return 0

@@ -81,8 +81,10 @@ def get_ful_key_tail(the_date):
 
 
 def main_run():
-    org_id_list = ['2k0r0963j0akld83lsd2', '2k0r1l55i2rs5544wz5', '2k0r2yvydbxbvibvgfm', '2k0r306o609oljxd1hh',
-                   '2kbyyjauwtate9syvmy', '2khxnw8yfxoga6eubib', '2khxwnl3092c2ygmbik']
+    # org_id_list = ['2k0r0963j0akld83lsd2', '2k0r1l55i2rs5544wz5', '2k0r2yvydbxbvibvgfm', '2k0r306o609oljxd1hh',
+    #                '2kbyyjauwtate9syvmy', '2khxnw8yfxoga6eubib', '2khxwnl3092c2ygmbik']
+    org_id_list = ['2k0r1l55i2rs5544wz5', '2khxwnl3092c2ygmbik', '2khxnw8yfxoga6eubib', '2knt1rqv6pp28dqlr80']
+
     # org_id_list = ['2k0r1l55i2rs5544wz5']
     work_sheet_input = get_work_sheet_input('yunsoo/work_sheet_input.json')
 

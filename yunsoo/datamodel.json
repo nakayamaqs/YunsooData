@@ -5,7 +5,7 @@
   "dsn": {
     "yunsu": {
       "type": "mysql",
-      "address": "yunsootestdb-r1.czevfdgeevhl.rds.cn-north-1.amazonaws.com.cn",
+      "address": "test-yunsoo.cquafg9deiuc.rds.cn-north-1.amazonaws.com.cn",
       "port": 3306,
       "dbname": "yunsoo2015DB",
       "user": "root",

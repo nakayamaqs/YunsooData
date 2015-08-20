@@ -15,7 +15,7 @@ conn = boto.s3.connect_to_region('cn-north-1')
 # bucketname = 'yunsudev-1'
 # b = conn.create_bucket(bucketname, location=Location.CNNorth1)
 
-ys_bucket = conn.get_bucket("yunsudev")
+ys_bucket = conn.get_bucket("test-yunsoo")
 
 def save_content(fullkey, content):
     k = Key(ys_bucket)
