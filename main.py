@@ -14,6 +14,8 @@ import calendar
 import os
 import sys
 
+reload(sys)
+sys.setdefaultencoding('utf8')
 os_path = os.path.abspath(os.path.dirname(sys.argv[0]))
 
 def get_current_path():
