@@ -11,10 +11,19 @@ from yunsoo.data_import import *
 # import datetime
 from datetime import date, timedelta
 import calendar
+import os
+import sys
 
+os_path = os.path.abspath(os.path.dirname(sys.argv[0]))
+
+def get_current_path():
+    if os.name == 'nt':
+        return ''
+    else:
+        return os.path.abspath(os.path.dirname(sys.argv[0]))
 
 def run_report(org_list, work_sheet_list, the_key_tail, from_day, end_day):
-    if data_import('yunsoo/datamodel.json')['status'] == 'ok':
+    if data_import(get_current_path() + 'yunsoo/datamodel.json')['status'] == 'ok':
         for o in org_list:
             print("Working on org: " + str(o))
             for i, e in enumerate(work_sheet_list):
@@ -86,7 +95,7 @@ def main_run():
     org_id_list = ['2k0r1l55i2rs5544wz5', '2khxwnl3092c2ygmbik', '2khxnw8yfxoga6eubib', '2knt1rqv6pp28dqlr80']
 
     # org_id_list = ['2k0r1l55i2rs5544wz5']
-    work_sheet_input = get_work_sheet_input('yunsoo/work_sheet_input.json')
+    work_sheet_input = get_work_sheet_input(get_current_path()+ 'yunsoo/work_sheet_input.json')
 
     # run yesterday's report
     yesterday_key = date.today() - timedelta(1)  # every day run yesterday's report
