@@ -3,7 +3,6 @@
 """
   This is the Entry of this python data service consumer.
 """
-
 __author__ = 'Zhe'
 
 from yunsoo.sheet_consumer import *
